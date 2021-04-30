@@ -492,12 +492,12 @@ namespace ZedGraph
 						float pixY = yAxis.Scale.Transform( curve.IsOverrideOrdinal, i, pt.Y );
 						float pixX = xAxis.Scale.Transform( curve.IsOverrideOrdinal, i, pt.X );
 
-						if ( pixX >= pane.Chart._rect.Left && pixX <= pane.Chart._rect.Right )
+						if ( pixX >= pane.ClipRect.Left && pixX <= pane.ClipRect.Right )
 						{
-							if ( pixY > pane.Chart._rect.Bottom )
-								pixY = pane.Chart._rect.Bottom;
-							if ( pixY < pane.Chart._rect.Top )
-								pixY = pane.Chart._rect.Top;
+							if ( pixY > pane.ClipRect.Bottom )
+								pixY = pane.ClipRect.Bottom;
+							if ( pixY < pane.ClipRect.Top )
+								pixY = pane.ClipRect.Top;
 
 							if ( !curve.IsSelected && this._gradientFill.IsGradientValueType )
 							{
@@ -692,11 +692,11 @@ namespace ZedGraph
 			bool xIsLog = xAxis._scale.IsLog;
 			bool yIsLog = yAxis._scale.IsLog;
 
-			// switch to int to optimize drawing speed (per Dale-a-b)
-			int minX = (int)pane.Chart.Rect.Left;
-			int maxX = (int)pane.Chart.Rect.Right;
-			int minY = (int)pane.Chart.Rect.Top;
-			int maxY = (int)pane.Chart.Rect.Bottom;
+            // switch to int to optimize drawing speed (per Dale-a-b)
+            int minX = (int)pane.ClipRect.Left;
+            int maxX = (int)pane.ClipRect.Right;
+            int minY = (int)pane.ClipRect.Top;
+            int maxY = (int)pane.ClipRect.Bottom;
 
 			using ( Pen pen = source.GetPen( pane, scaleFactor ) )
 			{
@@ -907,10 +907,10 @@ namespace ZedGraph
 			bool xIsLog = xAxis._scale.IsLog;
 			bool yIsLog = yAxis._scale.IsLog;
 
-			float minX = pane.Chart.Rect.Left;
-			float maxX = pane.Chart.Rect.Right;
-			float minY = pane.Chart.Rect.Top;
-			float maxY = pane.Chart.Rect.Bottom;
+            float minX = pane.ClipRect.Left;
+            float maxX = pane.ClipRect.Right;
+            float minY = pane.ClipRect.Top;
+            float maxY = pane.ClipRect.Bottom;
 
 			using ( Pen pen = source.GetPen( pane, scaleFactor ) )
 			{

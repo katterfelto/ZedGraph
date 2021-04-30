@@ -602,7 +602,11 @@ namespace ZedGraph
 				base.OnPaint( e );
 
 				// Add a try/catch pair since the users of the control can't catch this one
-				try { _masterPane.Draw( e.Graphics ); }
+				try
+                {
+                    // save the area of the rectangle to paint, on draw process pane exclude any objects out of this area
+                    _masterPane.ClipRect = e.ClipRectangle;
+                    _masterPane.Draw( e.Graphics ); }
 				catch { }
 			}
 

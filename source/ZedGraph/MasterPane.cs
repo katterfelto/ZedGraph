@@ -605,7 +605,11 @@ namespace ZedGraph
 			g.ResetClip();
 
 			foreach ( GraphPane pane in _paneList )
-				pane.Draw( g );
+            {
+                // spread the clip info to all panels
+                pane.ClipRect = _clipRect;
+                pane.Draw(g);
+            }
 
 			// Clip everything to the rect
 			g.SetClip( _rect );
