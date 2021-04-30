@@ -51,11 +51,18 @@ namespace ZedGraph
 		/// </summary>
 		[CLSCompliant(false)]
 		protected RectangleF _rect;
-		
-		/// <summary>Private field that holds the main title of the pane.  Use the
-		/// public property <see cref="Title"/> to access this value.
-		/// </summary>
-		[CLSCompliant(false)]
+
+        /// <summary>
+        /// The rectangle that defines the full area to render, in case of full invalidate or refresh is the same size of <see cref="_rect"/>
+        /// when there is an invalidate of a specific area only this area is processed
+        /// </summary>
+        [CLSCompliant(false)]
+        protected RectangleF _clipRect;
+
+        /// <summary>Private field that holds the main title of the pane.  Use the
+        /// public property <see cref="Title"/> to access this value.
+        /// </summary>
+        [CLSCompliant(false)]
 		protected GapLabel _title;
 		
 		/// <summary>Private field instance of the <see cref="ZedGraph.Legend"/> class.  Use the
@@ -287,11 +294,21 @@ namespace ZedGraph
 			set { _rect = value; }
 		}
 
-		/// <summary>
-		/// Accesses the <see cref="Legend"/> for this <see cref="PaneBase"/>
-		/// </summary>
-		/// <value>A reference to a <see cref="Legend"/> object</value>
-		public Legend Legend
+        /// <summary>
+        /// The rectangle that defines the full area to render, in case of full invalidate or refresh is the same size of <see cref="_rect"/>
+        /// when there is an invalidate of a specific area only this area is processed
+        /// </summary>
+        public RectangleF ClipRect
+        {
+            get { return _clipRect; }
+            set { _clipRect = value; }
+        }
+
+        /// <summary>
+        /// Accesses the <see cref="Legend"/> for this <see cref="PaneBase"/>
+        /// </summary>
+        /// <value>A reference to a <see cref="Legend"/> object</value>
+        public Legend Legend
 		{
 			get { return _legend; }
 		}
@@ -505,6 +522,7 @@ public PaneBase() : this( "", new RectangleF( 0, 0, 0, 0 ) )
 		public PaneBase( string title, RectangleF paneRect )
 		{
 			_rect = paneRect;
+            _clipRect = paneRect;
 
 			_legend = new Legend();
 				
@@ -548,6 +566,7 @@ public PaneBase() : this( "", new RectangleF( 0, 0, 0, 0 ) )
 			_baseDimension = rhs._baseDimension;
 			_margin = rhs._margin.Clone();
 			_rect = rhs._rect;
+            _clipRect = rhs._clipRect;
 
 			// Copy the reference types by cloning
 			_fill = rhs._fill.Clone();
@@ -624,9 +643,10 @@ public PaneBase() : this( "", new RectangleF( 0, 0, 0, 0 ) )
 			// backwards compatible as new member variables are added to classes
 			int sch = info.GetInt32( "schema" );
 
-			_rect = (RectangleF) info.GetValue( "rect", typeof(RectangleF) );
 			_legend = (Legend) info.GetValue( "legend", typeof(Legend) );
 			_title = (GapLabel) info.GetValue( "title", typeof(GapLabel) );
+			_rect = (RectangleF)info.GetValue("rect", typeof(RectangleF));
+			_clipRect = (RectangleF)info.GetValue("clipRect", typeof(RectangleF));
 			//this.isShowTitle = info.GetBoolean( "isShowTitle" );
 			_isFontsScaled = info.GetBoolean( "isFontsScaled" );
 			_isPenWidthScaled = info.GetBoolean( "isPenWidthScaled" );
@@ -646,14 +666,15 @@ public PaneBase() : this( "", new RectangleF( 0, 0, 0, 0 ) )
 		/// </summary>
 		/// <param name="info">A <see cref="SerializationInfo"/> instance that defines the serialized data</param>
 		/// <param name="context">A <see cref="StreamingContext"/> instance that contains the serialized data</param>
-		[SecurityPermissionAttribute(SecurityAction.Demand,SerializationFormatter=true)]
-		public virtual void GetObjectData( SerializationInfo info, StreamingContext context )
+		[SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
+		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.AddValue( "schema", schema );
+			info.AddValue("schema", schema);
 
-			info.AddValue( "rect", _rect );
 			info.AddValue( "legend", _legend );
 			info.AddValue( "title", _title );
+			info.AddValue("rect", _rect);
+			info.AddValue("clipRect", _clipRect);
 			//info.AddValue( "isShowTitle", isShowTitle );
 			info.AddValue( "isFontsScaled", _isFontsScaled );
 			info.AddValue( "isPenWidthScaled", _isPenWidthScaled );

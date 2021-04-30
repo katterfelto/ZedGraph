@@ -570,10 +570,10 @@ namespace ZedGraph
 
 			int tmpX, tmpY;
 
-			int minX = (int)pane.Chart.Rect.Left;
-			int maxX = (int)pane.Chart.Rect.Right;
-			int minY = (int)pane.Chart.Rect.Top;
-			int maxY = (int)pane.Chart.Rect.Bottom;
+			int minX = (int)pane.ClipRect.Left;
+			int maxX = (int)pane.ClipRect.Right;
+			int minY = (int)pane.ClipRect.Top;
+			int maxY = (int)pane.ClipRect.Bottom;
 
 			// (Dale-a-b) we'll set an element to true when it has been drawn	
 			bool[,] isPixelDrawn = new bool[maxX + 1, maxY + 1];
